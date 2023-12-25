@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/',function(){
-// return view("Tasks");
-// });
+Route::get('/',function(){
+return view("Posts");
+});
 
 Route::get('/',[PostController::class,'index']);
-
-Route::get('/', [PostController::class, 'show']);
+// Route::get('/', [PostController::class, 'show']);

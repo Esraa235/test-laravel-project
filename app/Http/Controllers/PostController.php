@@ -12,7 +12,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('Tasks');
+        $posts = Post::all(); 
+        return view('posts', ['posts' => $posts]);
     }
 
     /**
@@ -61,5 +62,16 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+
+
+    protected $layout = 'layouts.master';
+ 
+    /**
+     * Show the user profile.
+     */
+    public function showProfile()
+    {
+        $this->layout->content = View::make('user.profile');
     }
 }

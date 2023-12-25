@@ -7,21 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-        @extends('layouts.app')
-        @section('title', 'Home Page')
-        @section('content')
-        @if($post)
-        
-            @foreach($posts as $post)
-                {{ $post['title'] }}
-                {{ $post['description'] }}
-            @endforeach
-        
-    @else
-        <p> no thing to post</p>
-    @endif
-        
-        @endsection
-  
+   
 </body>
 </html>
