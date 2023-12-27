@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -13,7 +12,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all(); 
-        return view('posts', ['posts' => $posts]);
+        // echo($posts);
+       return  view('posts.index',compact('posts') );
     }
 
     /**
@@ -29,15 +29,31 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'=>'required',
+            'description'=>'required',
+             'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+    //  * Display the specified resource.
+        $post=new Post();
+        $post->title=$request->input('title');
+        $post->description=$request->input('description');
+    
+if($request->hasFile('image')){
+    $image=$request->file('image');
+    $imageName=time().'.'.$image->getClientOriginalExtension();
+    $image->move(public_path('images'),$imageName);
+    $post->image=$imageName;
+}
+
+      $post->save();
+      return redirect()->route('posts.index')->with('success','post created successfuly');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Post $post)
     {
-        return view('/','post');
+        return view('posts.show',compact('post'));
     }
 
     /**
@@ -45,7 +61,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit',compact('post')); 
     }
 
     /**
@@ -53,7 +69,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'title'=>'required',
+            'description'=>'required',
+            'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $post->title=$request->input('title');
+        $post->description=$request->input('description');
+
+        $post->save();
+        return redirect()->route('posts.index')->with('success','post updated successfuly');
     }
 
     /**
@@ -61,17 +86,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
-    }
+      $post->delete();
+      return redirect()->route('posts.index')->with('success','post deleted successfuly');
 
-
-    protected $layout = 'layouts.master';
- 
-    /**
-     * Show the user profile.
-     */
-    public function showProfile()
-    {
-        $this->layout->content = View::make('user.profile');
     }
 }
